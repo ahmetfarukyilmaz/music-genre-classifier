@@ -51,7 +51,6 @@ wav_dir = "./Data/genres_original"
 
 
 songs = [
-    (f"{wav_dir}/blues/blues.00000.wav", "Blues 0000000000",),
     (
         f"{wav_dir}/blues/blues.00040.wav",
         "Blues (Stevie Ray Vaughan - Love Struck Baby)",
