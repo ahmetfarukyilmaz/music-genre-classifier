@@ -20,7 +20,7 @@ mapping = {
 }
 
 # get columns of data from 20 to 42
-X = data.iloc[:, 20:42]
+X = data.iloc[:, 19:45]
 
 y = np.array([mapping[i] for i in data.iloc[:, -1]])
 
@@ -85,4 +85,6 @@ nn = create_neural_network(X)
 
 nn.summary()
 
-nn.fit(X_train, y_train, validation_data=(X_test, y_test), batch_size=32, epochs=599)
+nn.fit(X_train, y_train, validation_data=(X_test, y_test), batch_size=32, epochs=100)
+
+nn.save('./frk-classifier')
