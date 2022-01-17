@@ -46,32 +46,14 @@ def create_neural_network(data):
 
     model.add(keras.Input(data.shape[1]))
 
-    # 1st hidden layer
+    # hidden layers
     model.add(keras.layers.Dense(4096, activation="relu"))
-    # model.add(keras.layers.Dropout(0.3))
-
-    # 1st hidden layer
     model.add(keras.layers.Dense(2048, activation="relu"))
-    # model.add(keras.layers.Dropout(0.3))
-
-    # 1st hidden layer
     model.add(keras.layers.Dense(1024, activation="relu"))
-    # model.add(keras.layers.Dropout(0.3))
-
-    # 1st hidden layer
     model.add(keras.layers.Dense(512, activation="relu"))
-    # model.add(keras.layers.Dropout(0.3))
-
-    # 1st hidden layer
     model.add(keras.layers.Dense(256, activation="relu"))
-    # model.add(keras.layers.Dropout(0.3))
-
-    # 2nd hidden layer
     model.add(keras.layers.Dense(128, activation="relu"))
-    # model.add(keras.layers.Dropout(0.3))
-
-    # 3nd hidden layer
-    model.add(keras.layers.Dense(56, activation="relu"))
+    model.add(keras.layers.Dense(64, activation="relu"))
     # model.add(keras.layers.Dropout(0.3))
 
     # output layer

@@ -15,7 +15,8 @@ mapping = {
     9: "rock",
 }
 
-y, sr = librosa.load("gilmour.wav")
+file = "test/o-sen-olsan.wav"
+y, sr = librosa.load(file)
 
 chroma_stft = librosa.feature.chroma_stft(y)
 chroma_stft_mean = np.mean(chroma_stft)
@@ -47,20 +48,27 @@ perceptr_var = np.var(perceptr)
 harmonic_mean = np.mean(harmonic)
 harmonic_var = np.var(harmonic)
 
-tempo = librosa.beat.tempo(y)
+tempo = librosa.beat.tempo(y)[0]
 
 mfcc = librosa.feature.mfcc(y)
 mfcc_means = np.array([np.mean(mfcc[i]) for i in range(len(mfcc))])
 mfcc_vars = np.array([np.var(mfcc[i]) for i in range(len(mfcc))])
 
-feature_vector = []
+feature_vector = [chroma_stft_mean, chroma_stft_var, rms_var, spectral_bandwidth_mean,
+                  harmonic_mean, harmonic_var, perceptr_mean, perceptr_var, tempo]
 
-for i in range(13):
+for i in range(0, 5):
     feature_vector.append(mfcc_means[i])
     feature_vector.append(mfcc_vars[i])
 
+for i in range(5, 9):
+    feature_vector.append(mfcc_means[i])
+
+for i in [10, 17]:
+    feature_vector.append(mfcc_means[i])
+
 feature_vector = np.array(feature_vector)
-feature_vector = feature_vector.reshape((1, 26))
+feature_vector = feature_vector.reshape((1, 25))
 frk_classifier = tf.keras.models.load_model('./frk-classifier')
 
 # Check its architecture
@@ -71,4 +79,10 @@ prediction = frk_classifier.predict(feature_vector)
 # return position of max
 MaxPosition = int(np.argmax(prediction))
 prediction_label = mapping[MaxPosition]
-print("Queen: " + prediction_label)
+print(f"File: {file}")
+print(f"Label: {prediction_label}\n")
+
+for i in range(10):
+    print(f"{mapping[i]}: {prediction[0][i]}")
+
+print()
