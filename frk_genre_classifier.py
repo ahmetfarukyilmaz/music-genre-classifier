@@ -4,7 +4,7 @@ import tensorflow.keras as keras
 from sklearn.model_selection import train_test_split
 
 
-data = pd.read_csv("features_3_sec.csv")
+data = pd.read_csv("Data/features_3_sec.csv")
 
 mapping = {
     "blues": 0,
@@ -19,10 +19,14 @@ mapping = {
     "rock": 9,
 }
 
-# get columns of data from 20 to 42
-X = data.iloc[:, 20:42]
+print("Enter column indexes: ", end="")
+column_indexes = [int(part) for part in input().split()]
+
+X = data.iloc[:, column_indexes]
 
 y = np.array([mapping[i] for i in data.iloc[:, -1]])
+
+print(f"Features: {X.columns.values}")
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
@@ -85,4 +89,4 @@ nn = create_neural_network(X)
 
 nn.summary()
 
-nn.fit(X_train, y_train, validation_data=(X_test, y_test), batch_size=32, epochs=599)
+nn.fit(X_train, y_train, validation_data=(X_test, y_test), batch_size=32, epochs=256)
