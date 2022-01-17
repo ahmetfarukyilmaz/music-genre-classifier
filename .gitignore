@@ -214,3 +214,5 @@ cython_debug/
 
 /Data
 /figures
+data.json
+/data-small

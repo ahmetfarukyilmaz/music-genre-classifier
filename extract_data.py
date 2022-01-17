@@ -77,4 +77,4 @@ def save_mfcc(
 
 
 if __name__ == "__main__":
-    save_mfcc(DATASET_PATH, JSON_PATH, num_segments=10)
+    save_mfcc(DATASET_PATH, JSON_PATH, num_segments=10, num_mfcc=20)
