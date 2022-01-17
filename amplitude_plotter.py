@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
 import librosa
 import librosa.display
-import skimage.io
-import numpy as numpy
-
 # blues     00040 Stevie Ray Vaughan - Love Struck Baby
 # classical 00045 Richard Strauss - Fuge Für Klavier
 # country   00055 Vince Gill - Take Your Memory With You
@@ -22,45 +19,8 @@ def scale_minmax(X, min=0.0, max=1.0):
     return X_scaled
 
 
-def spectrogram_image(y, sr, out, hop_length, n_mels):
-    # use log-melspectrogram
-    mels = librosa.feature.melspectrogram(
-        y=y, sr=sr, n_mels=n_mels, n_fft=hop_length * 2, hop_length=hop_length
-    )
-    mels = numpy.log(mels + 1e-9)  # add small number to avoid log(0)
-
-    # min-max scale to fit inside 8-bit range
-    img = scale_minmax(mels, 0, 255).astype(numpy.uint8)
-    img = numpy.flip(img, axis=0)  # put low frequencies at the bottom in image
-    img = 255 - img  # invert. make black==more energy
-
-    out = out[:-1] + ".png"
-    # save as PNG
-    skimage.io.imsave(out, img)
-
-
 def plot_wave_form(path, title):
-
-    # settings
-    hop_length = 512  # number of samples per time-step in spectrogram
-    n_mels = 128  # number of bins in spectrogram. Height of image
-    time_steps = 384  # number of time-steps. Width of image
-
     y, sr = librosa.load(path)
-
-    # extract a fixed length window
-    start_sample = 0  # starting at beginning
-    length_samples = time_steps * hop_length
-    window = y[start_sample : start_sample + length_samples]
-
-    # convert to PNG
-    spectrogram_image(
-        window,
-        sr=sr,
-        out=f"figures/mfcc-pure/{title}",
-        hop_length=hop_length,
-        n_mels=n_mels,
-    )
 
     plt.figure(figsize=(10, 6))
 

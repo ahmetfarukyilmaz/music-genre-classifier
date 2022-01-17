@@ -216,3 +216,4 @@ cython_debug/
 /figures
 data.json
 /data-small
+.idea
