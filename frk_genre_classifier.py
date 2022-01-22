@@ -19,10 +19,10 @@ mapping = {
     "rock": 9,
 }
 
-print("Enter column indexes: ", end="")
-column_indexes = [int(part) for part in input().split()]
+# print("Enter column indexes: ", end="")
+# column_indexes = [int(part) for part in input().split()]
 
-X = data.iloc[:, column_indexes]
+X = data.iloc[:, 19:-15]
 
 y = np.array([mapping[i] for i in data.iloc[:, -1]])
 
@@ -71,6 +71,6 @@ nn = create_neural_network(X)
 
 nn.summary()
 
-nn.fit(X_train, y_train, validation_data=(X_test, y_test), batch_size=32, epochs=100)
+nn.fit(X_train, y_train, validation_data=(X_test, y_test), batch_size=32, epochs=599)
 
-nn.save('./frk-classifier')
+nn.save('./frk-classifier-longrun')

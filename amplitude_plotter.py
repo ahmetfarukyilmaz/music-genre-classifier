@@ -11,6 +11,7 @@ import librosa.display
 # pop       00039 Britney Spears - Deep In My Heart
 # reggae    00072 Freddie McGregor - Prophecy
 # rock      00033 The Rolling Stones - Gimme Shelter
+import numpy as np
 
 
 def scale_minmax(X, min=0.0, max=1.0):
@@ -29,6 +30,19 @@ def plot_wave_form(path, title):
     plt.ylabel("Amplitude")
     plt.savefig(f"figures/wave/{title}")
     plt.close()
+
+    fft = np.fft.fft(y)
+    magnitudes = np.abs(fft)
+    frequencies = np.linspace(0,sr, len(magnitudes))
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(frequencies, magnitudes)
+    plt.xlabel("Frequency")
+    plt.ylabel("Magnitude")
+
+    plt.savefig(f"figures/fft/{title}")
+    plt.close()
+
 
     stft = librosa.stft(y)
     stft_in_dB = librosa.amplitude_to_db(abs(stft))

@@ -1,8 +1,39 @@
-import sys
-
 import librosa
 import numpy as np
-import tensorflow as tf
+import pandas as pd
+from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.model_selection import cross_val_score, GridSearchCV, KFold, RandomizedSearchCV, train_test_split
+
+import xgboost as xgb
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+
+data = pd.read_csv("features_3_sec.csv")
+
+mapping = {
+    "blues": 0,
+    "classical": 1,
+    "country": 2,
+    "disco": 3,
+    "hiphop": 4,
+    "jazz": 5,
+    "metal": 6,
+    "pop": 7,
+    "reggae": 8,
+    "rock": 9,
+}
+
+# get columns of data from 20 to 42
+X = data.iloc[:, 19:45]
+
+y = np.array([mapping[i] for i in data.iloc[:, -1]])
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+
+svm = SVC(decision_function_shape="ovo")
+svm.fit(X_train, y_train)
+
 
 mapping = {
     0: "blues",
@@ -17,9 +48,7 @@ mapping = {
     9: "rock",
 }
 
-
-file = "test/" + sys.argv[1]
-y, sr = librosa.load(file)
+y, sr = librosa.load("test/dre.wav")
 
 chroma_stft = librosa.feature.chroma_stft(y)
 chroma_stft_mean = np.mean(chroma_stft)
@@ -51,41 +80,28 @@ perceptr_var = np.var(perceptr)
 harmonic_mean = np.mean(harmonic)
 harmonic_var = np.var(harmonic)
 
-tempo = librosa.beat.tempo(y)[0]
+tempo = librosa.beat.tempo(y)
 
 mfcc = librosa.feature.mfcc(y)
 mfcc_means = np.array([np.mean(mfcc[i]) for i in range(len(mfcc))])
 mfcc_vars = np.array([np.var(mfcc[i]) for i in range(len(mfcc))])
 
-feature_vector = [chroma_stft_mean, chroma_stft_var, rms_var, spectral_bandwidth_mean,
-                  harmonic_mean, harmonic_var, perceptr_mean, perceptr_var, tempo]
+feature_vector = []
 
-for i in range(0, 5):
+for i in range(13):
     feature_vector.append(mfcc_means[i])
     feature_vector.append(mfcc_vars[i])
 
-for i in range(5, 9):
-    feature_vector.append(mfcc_means[i])
-
-for i in [10, 17]:
-    feature_vector.append(mfcc_means[i])
-
 feature_vector = np.array(feature_vector)
-feature_vector = feature_vector.reshape((1, 25))
-frk_classifier = tf.keras.models.load_model('./frk-classifier')
+feature_vector = feature_vector.reshape((1, 26))
 
-# Check its architecture
-# frk_classifier.summary()
+y_pred = svm.predict(X_test)
+y_pred_train = svm.predict(X_train)
 
-prediction = frk_classifier.predict(feature_vector)
+print(f"Training accuracy: {accuracy_score(y_train, y_pred_train)}")
+print(f"Validation accuracy: {accuracy_score(y_test, y_pred)}")
 
-# return position of max
-MaxPosition = int(np.argmax(prediction))
-prediction_label = mapping[MaxPosition]
-print(f"File: {file}")
-print(f"Label: {prediction_label}\n")
 
-for i in range(10):
-    print(f"{mapping[i]}: {prediction[0][i]}")
 
-print()
+y_pred = svm.predict(feature_vector)
+print(y_pred)
