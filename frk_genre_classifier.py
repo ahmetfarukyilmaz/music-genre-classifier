@@ -54,7 +54,6 @@ def create_neural_network(data):
     model.add(keras.layers.Dense(256, activation="relu"))
     model.add(keras.layers.Dense(128, activation="relu"))
     model.add(keras.layers.Dense(64, activation="relu"))
-    # model.add(keras.layers.Dropout(0.3))
 
     # output layer
     model.add(keras.layers.Dense(10, activation="softmax"))
@@ -73,4 +72,4 @@ nn.summary()
 
 nn.fit(X_train, y_train, validation_data=(X_test, y_test), batch_size=32, epochs=599)
 
-nn.save('./frk-classifier-longrun')
+nn.save("./frk-classifier-longrun")
