@@ -57,8 +57,17 @@ mfcc = librosa.feature.mfcc(y)
 mfcc_means = np.array([np.mean(mfcc[i]) for i in range(len(mfcc))])
 mfcc_vars = np.array([np.var(mfcc[i]) for i in range(len(mfcc))])
 
-feature_vector = [chroma_stft_mean, chroma_stft_var, rms_var, spectral_bandwidth_mean,
-                  harmonic_mean, harmonic_var, perceptr_mean, perceptr_var, tempo]
+feature_vector = [
+    chroma_stft_mean,
+    chroma_stft_var,
+    rms_var,
+    spectral_bandwidth_mean,
+    harmonic_mean,
+    harmonic_var,
+    perceptr_mean,
+    perceptr_var,
+    tempo,
+]
 
 for i in range(0, 5):
     feature_vector.append(mfcc_means[i])
@@ -72,10 +81,7 @@ for i in [10, 17]:
 
 feature_vector = np.array(feature_vector)
 feature_vector = feature_vector.reshape((1, 25))
-frk_classifier = tf.keras.models.load_model('./frk-classifier')
-
-# Check its architecture
-# frk_classifier.summary()
+frk_classifier = tf.keras.models.load_model("./frk-classifier")
 
 prediction = frk_classifier.predict(feature_vector)
 

@@ -4,7 +4,7 @@ import tensorflow.keras as keras
 from sklearn.model_selection import train_test_split
 
 
-data = pd.read_csv("Data/features_3_sec.csv")
+data = pd.read_csv("features_3_sec.csv")
 
 mapping = {
     "blues": 0,
@@ -19,8 +19,6 @@ mapping = {
     "rock": 9,
 }
 
-# print("Enter column indexes: ", end="")
-# column_indexes = [int(part) for part in input().split()]
 
 X = data.iloc[:, 19:-15]
 
@@ -29,9 +27,6 @@ y = np.array([mapping[i] for i in data.iloc[:, -1]])
 print(f"Features: {X.columns.values}")
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
-
-
-# create a neural network with 2 hidden layers of size 128 nodes each and a softmax output layer with 10 nodes for each class (genre)
 
 
 def create_neural_network(data):
