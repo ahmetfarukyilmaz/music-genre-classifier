@@ -9,3 +9,5 @@ Categorizing music files according to their genre is a challenging and important
 ### Methodology
 
 We used various Python packages in this project: [Librosa](https://librosa.org/) for feature extraction, [Matplotlib](https://matplotlib.org/) for visual content (graphs, plots, etc.), [Pandas](https://pandas.pydata.org/) for data manipulation, and finally [Tensorflow](https://www.tensorflow.org/) and [Scikit](https://scikit-learn.org/) for machine learning models.
+
+Detailed information about the project can be found in [this report](report.docx).
