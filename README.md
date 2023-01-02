@@ -1,4 +1,4 @@
-# Music Genre Classification
+# Music Genre Classifier
 
 Aim of this project is to create machine learning models that will predict the genre of a given music file.
 
